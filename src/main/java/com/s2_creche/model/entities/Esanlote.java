@@ -2,9 +2,9 @@ package com.s2_creche.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Function;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -48,15 +48,51 @@ public class Esanlote implements Serializable {
     private Integer cdempresa;
 
     public List<Esanmovanimais> getMovimentacoesCreche() {
-        List<Esanmovanimais> mov = esanmovanimaisList;
-        mov.removeIf(m -> m.getCdfase().getCdfase() != 4);
+        List<Esanmovanimais> mov = new ArrayList<>();
+        for (Esanmovanimais m : esanmovanimaisList) {
+            if (m.getCdfase().getCdfase() == 4) {
+                mov.add(m);
+            }
+        }
         return mov;
     }
 
+    public List<Esanmovanimais> getMortesEngorda() {
+        List<Esanmovanimais> mortes = new ArrayList<>();
+        for (Esanmovanimais m : getMovimentacoesEngorda()) {
+            if (m.getFltipo().equals("O")) {
+                mortes.add(m);
+            }
+        }
+        return mortes;
+    }
+
+    public List<Esanmovanimais> getMortesCreche() {
+        List<Esanmovanimais> mortes = new ArrayList<>();
+        for (Esanmovanimais m : getMovimentacoesCreche()) {
+            if (m.getFltipo().equals("O")) {
+                mortes.add(m);
+            }
+        }
+        return mortes;
+    }
+
     public List<Esanmovanimais> getMovimentacoesEngorda() {
-        List<Esanmovanimais> mov = esanmovanimaisList;
-        mov.removeIf(m -> m.getCdfase().getCdfase() != 6);
+        List<Esanmovanimais> mov = new ArrayList<>();
+        for (Esanmovanimais m : esanmovanimaisList) {
+            if (m.getCdfase().getCdfase() == 6) {
+                mov.add(m);
+            }
+        }
         return mov;
+    }
+
+    public String getFase() {
+        if (this.flsituacao.equals("4")) {
+            return "Creche";
+        } else {
+            return "Terminação";
+        }
     }
 
 }
